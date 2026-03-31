@@ -1,7 +1,161 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
 @import url('tldraw/tldraw.css');
+@import url('@fontsource/instrument-serif');
 
 body {
-	font-family: 'Inter';
+	font-family: var(--font-geist-sans), sans-serif;
 	overscroll-behavior: none;
+}
+
+/* === Geist/Vercel CSS variable overrides === */
+
+.tl-container {
+	/* Fonts */
+	--tl-font-sans: var(--font-geist-sans), sans-serif;
+	--tl-font-mono: var(--font-geist-mono), monospace;
+	--tl-font-draw: var(--font-geist-pixel-square), var(--font-geist-sans), sans-serif;
+	--tl-font-serif: 'Instrument Serif', serif;
+
+	/* Border-radius — all zero for sharp edges */
+	--tl-radius-0: 0px;
+	--tl-radius-1: 0px;
+	--tl-radius-2: 0px;
+	--tl-radius-3: 0px;
+	--tl-radius-4: 0px;
+}
+
+.tl-theme__light {
+	/* Shadows — flat UI, replace with thin 1px borders */
+	--tl-shadow-1: none;
+	--tl-shadow-2: 0 0 0 1px var(--tl-color-divider);
+	--tl-shadow-3: 0 0 0 1px var(--tl-color-divider);
+	--tl-shadow-4: 0 0 0 1px var(--tl-color-divider);
+
+	/* Canvas */
+	--tl-color-background: #ffffff;
+	--tl-color-grid: #e5e5e5;
+
+	/* Panels */
+	--tl-color-panel: #ffffff;
+	--tl-color-panel-contrast: #ffffff;
+	--tl-color-panel-overlay: rgba(255, 255, 255, 0.9);
+	--tl-color-panel-transparent: rgba(255, 255, 255, 0);
+
+	/* Text */
+	--tl-color-text: #000000;
+	--tl-color-text-0: #171717;
+	--tl-color-text-1: #333333;
+	--tl-color-text-3: #666666;
+
+	/* Selection & accent — monochrome black for professional look */
+	--tl-color-selected: #000000;
+	--tl-color-selected-contrast: #ffffff;
+	--tl-color-selection-stroke: #000000;
+	--tl-color-selection-fill: rgba(0, 0, 0, 0.04);
+	--tl-color-primary: #000000;
+	--tl-color-focus: #000000;
+
+	/* Borders & dividers */
+	--tl-color-divider: #eaeaea;
+	--tl-color-low: #fafafa;
+	--tl-color-low-border: #eaeaea;
+
+	/* Muted & hints */
+	--tl-color-muted-none: rgba(0, 0, 0, 0);
+	--tl-color-muted-0: rgba(0, 0, 0, 0.02);
+	--tl-color-muted-1: rgba(0, 0, 0, 0.06);
+	--tl-color-muted-2: rgba(0, 0, 0, 0.06);
+	--tl-color-hint: rgba(0, 0, 0, 0.04);
+	--tl-color-overlay: rgba(0, 0, 0, 0.2);
+}
+
+/* === Targeted UI fixes === */
+
+/* Hide the "draw" dash option from style panel */
+[data-testid='style.dash.draw'] {
+	display: none;
+}
+
+/* Force sharp corners on Radix popover/dropdown portals */
+[data-radix-popper-content-wrapper] > * {
+	border-radius: 0 !important;
+}
+
+/* Selected tool highlight — sharp corners (hardcoded 8px in tldraw) */
+.tlui-button__tool::after {
+	border-radius: 0 !important;
+}
+
+/* All button ::after pseudo-elements — sharp corners */
+.tlui-button::after {
+	border-radius: 0 !important;
+}
+
+/* === Remove ALL gradients — flat solid backgrounds everywhere === */
+
+/* Buttons with aria-expanded (e.g. dropdowns, popovers) */
+.tlui-button[aria-expanded='true'][data-direction='left'],
+.tlui-button[aria-expanded='true'][data-direction='left']::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Submenu triggers (context menus, right-click menus) */
+.tlui-menu__submenu__trigger[data-state='open']::after,
+.tlui-menu__submenu__trigger:is(:hover, [data-state='open'])::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Menu zone (top toolbar menus) */
+.tlui-menu-zone *[data-state='open']::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Page menu submenu button */
+.tlui-page_menu__item__submenu > .tlui-button[data-state='open']::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Style panel open buttons */
+.tlui-style-panel .tlui-button[data-state='open']::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Main toolbar open states */
+.tlui-main-toolbar--horizontal *[data-state='open']::after,
+.tlui-main-toolbar--vertical *[data-state='open']::after {
+	background: var(--tl-color-muted-2) !important;
+}
+
+/* Active button state — solid, no gradient */
+.tlui-button[data-isactive='true']::after {
+	background: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Remove box outlines on toolbar toggle items in style panel
+   The original tldraw uses subtle rounded backgrounds that blend in.
+   With 0 radius + our shadow overrides, the toggle items get visible boxes.
+   Reset their container shadow to none so buttons look clean. */
+.tlui-toolbar-toggle-group {
+	box-shadow: none !important;
+}
+
+/* Style panel button pickers — no visible container border */
+.tlui-style-panel [role='toolbar'] {
+	box-shadow: none !important;
+}
+
+/* === Geist Pixel variant switching via data attribute on container === */
+.tl-container[data-pixel-variant='square'] {
+	--tl-font-draw: var(--font-geist-pixel-square), var(--font-geist-sans), sans-serif;
+}
+.tl-container[data-pixel-variant='grid'] {
+	--tl-font-draw: var(--font-geist-pixel-grid), var(--font-geist-sans), sans-serif;
+}
+.tl-container[data-pixel-variant='circle'] {
+	--tl-font-draw: var(--font-geist-pixel-circle), var(--font-geist-sans), sans-serif;
+}
+.tl-container[data-pixel-variant='triangle'] {
+	--tl-font-draw: var(--font-geist-pixel-triangle), var(--font-geist-sans), sans-serif;
+}
+.tl-container[data-pixel-variant='line'] {
+	--tl-font-draw: var(--font-geist-pixel-line), var(--font-geist-sans), sans-serif;
 }

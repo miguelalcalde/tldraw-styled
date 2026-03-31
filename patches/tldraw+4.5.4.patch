@@ -1,0 +1,150 @@
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js
+index 6898f8a..122712c 100644
+--- a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js
++++ b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js
+@@ -139,10 +139,10 @@ class ArrowShapeUtil extends import_editor.ShapeUtil {
+       start: { x: 0, y: 0 },
+       end: { x: 2, y: 0 },
+       arrowheadStart: "none",
+-      arrowheadEnd: "arrow",
++      arrowheadEnd: "triangle",
+       richText: (0, import_editor.toRichText)(""),
+       labelPosition: 0.5,
+-      font: "draw",
++      font: "sans",
+       scale: 1
+     };
+   }
+@@ -549,7 +549,7 @@ class ArrowShapeUtil extends import_editor.ShapeUtil {
+           type: shape.type,
+           props: {
+             ...shape.props,
+-            arrowheadStart: shape.props.arrowheadStart === "none" ? "arrow" : "none"
++            arrowheadStart: shape.props.arrowheadStart === "none" ? "triangle" : "none"
+           }
+         };
+       }
+@@ -559,7 +559,7 @@ class ArrowShapeUtil extends import_editor.ShapeUtil {
+           type: shape.type,
+           props: {
+             ...shape.props,
+-            arrowheadEnd: shape.props.arrowheadEnd === "none" ? "arrow" : "none"
++            arrowheadEnd: shape.props.arrowheadEnd === "none" ? "triangle" : "none"
+           }
+         };
+       }
+@@ -932,8 +932,8 @@ const ArrowSvg = (0, import_editor.track)(function ArrowSvg2({
+         fill: "none",
+         stroke: (0, import_editor.getColorValue)(theme, shape.props.color, "solid"),
+         strokeWidth,
+-        strokeLinejoin: "round",
+-        strokeLinecap: "round",
++        strokeLinejoin: "miter",
++        strokeLinecap: "butt",
+         pointerEvents: "none",
+         children: [
+           handlePath,
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js
+index fb527b1..0668d80 100644
+--- a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js
++++ b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js
+@@ -29,13 +29,13 @@ function getArrowPoints(info, side, strokeWidth) {
+     case "straight": {
+       const opposite = side === "end" ? info.start.point : info.end.point;
+       const compareLength = import_editor.Vec.Dist(opposite, point);
+-      const length = (0, import_editor.clamp)(compareLength / 5, strokeWidth, strokeWidth * 3);
++      const length = (0, import_editor.clamp)(compareLength / 3, strokeWidth * 2, strokeWidth * 6);
+       int = import_editor.Vec.Nudge(point, opposite, length);
+       break;
+     }
+     case "arc": {
+       const compareLength = Math.abs(info.bodyArc.length);
+-      const length = (0, import_editor.clamp)(compareLength / 5, strokeWidth, strokeWidth * 3);
++      const length = (0, import_editor.clamp)(compareLength / 3, strokeWidth * 2, strokeWidth * 6);
+       const intersections = (0, import_editor.intersectCircleCircle)(
+         point,
+         length,
+@@ -48,7 +48,7 @@ function getArrowPoints(info, side, strokeWidth) {
+     case "elbow": {
+       const previousPoint = side === "end" ? info.route.points[info.route.points.length - 2] : info.route.points[1];
+       const previousSegmentLength = import_editor.Vec.ManhattanDist(previousPoint, point);
+-      const length = (0, import_editor.clamp)(previousSegmentLength / 2, strokeWidth, strokeWidth * 3);
++      const length = (0, import_editor.clamp)(previousSegmentLength / 2, strokeWidth * 2, strokeWidth * 6);
+       int = previousPoint ? import_editor.Vec.Nudge(point, previousPoint, length) : point;
+       break;
+     }
+diff --git a/node_modules/tldraw/dist-esm/lib/shapes/arrow/ArrowShapeUtil.mjs b/node_modules/tldraw/dist-esm/lib/shapes/arrow/ArrowShapeUtil.mjs
+index d3f95e8..67cace9 100644
+--- a/node_modules/tldraw/dist-esm/lib/shapes/arrow/ArrowShapeUtil.mjs
++++ b/node_modules/tldraw/dist-esm/lib/shapes/arrow/ArrowShapeUtil.mjs
+@@ -157,10 +157,10 @@ class ArrowShapeUtil extends ShapeUtil {
+       start: { x: 0, y: 0 },
+       end: { x: 2, y: 0 },
+       arrowheadStart: "none",
+-      arrowheadEnd: "arrow",
++      arrowheadEnd: "triangle",
+       richText: toRichText(""),
+       labelPosition: 0.5,
+-      font: "draw",
++      font: "sans",
+       scale: 1
+     };
+   }
+@@ -567,7 +567,7 @@ class ArrowShapeUtil extends ShapeUtil {
+           type: shape.type,
+           props: {
+             ...shape.props,
+-            arrowheadStart: shape.props.arrowheadStart === "none" ? "arrow" : "none"
++            arrowheadStart: shape.props.arrowheadStart === "none" ? "triangle" : "none"
+           }
+         };
+       }
+@@ -577,7 +577,7 @@ class ArrowShapeUtil extends ShapeUtil {
+           type: shape.type,
+           props: {
+             ...shape.props,
+-            arrowheadEnd: shape.props.arrowheadEnd === "none" ? "arrow" : "none"
++            arrowheadEnd: shape.props.arrowheadEnd === "none" ? "triangle" : "none"
+           }
+         };
+       }
+@@ -950,8 +950,8 @@ const ArrowSvg = track(function ArrowSvg2({
+         fill: "none",
+         stroke: getColorValue(theme, shape.props.color, "solid"),
+         strokeWidth,
+-        strokeLinejoin: "round",
+-        strokeLinecap: "round",
++        strokeLinejoin: "miter",
++        strokeLinecap: "butt",
+         pointerEvents: "none",
+         children: [
+           handlePath,
+diff --git a/node_modules/tldraw/dist-esm/lib/shapes/arrow/arrowheads.mjs b/node_modules/tldraw/dist-esm/lib/shapes/arrow/arrowheads.mjs
+index 0e5a12d..6611c96 100644
+--- a/node_modules/tldraw/dist-esm/lib/shapes/arrow/arrowheads.mjs
++++ b/node_modules/tldraw/dist-esm/lib/shapes/arrow/arrowheads.mjs
+@@ -13,13 +13,13 @@ function getArrowPoints(info, side, strokeWidth) {
+     case "straight": {
+       const opposite = side === "end" ? info.start.point : info.end.point;
+       const compareLength = Vec.Dist(opposite, point);
+-      const length = clamp(compareLength / 5, strokeWidth, strokeWidth * 3);
++      const length = clamp(compareLength / 3, strokeWidth * 2, strokeWidth * 6);
+       int = Vec.Nudge(point, opposite, length);
+       break;
+     }
+     case "arc": {
+       const compareLength = Math.abs(info.bodyArc.length);
+-      const length = clamp(compareLength / 5, strokeWidth, strokeWidth * 3);
++      const length = clamp(compareLength / 3, strokeWidth * 2, strokeWidth * 6);
+       const intersections = intersectCircleCircle(
+         point,
+         length,
+@@ -32,7 +32,7 @@ function getArrowPoints(info, side, strokeWidth) {
+     case "elbow": {
+       const previousPoint = side === "end" ? info.route.points[info.route.points.length - 2] : info.route.points[1];
+       const previousSegmentLength = Vec.ManhattanDist(previousPoint, point);
+-      const length = clamp(previousSegmentLength / 2, strokeWidth, strokeWidth * 3);
++      const length = clamp(previousSegmentLength / 2, strokeWidth * 2, strokeWidth * 6);
+       int = previousPoint ? Vec.Nudge(point, previousPoint, length) : point;
+       break;
+     }
