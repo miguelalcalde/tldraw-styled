@@ -1,40 +1,32 @@
-<div alt style="text-align: center; transform: scale(.5);">
-	<picture>
-		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/tldraw/tldraw/main/assets/github-hero-dark.png" />
-		<img alt="tldraw" src="https://raw.githubusercontent.com/tldraw/tldraw/main/assets/github-hero-light.png" />
-	</picture>
-</div>
+# tldraw-styled
 
-This repo contains a template for using [tldraw](https://github.com/tldraw/tldraw) with the [Next.js](https://nextjs.org/) framework.
+An experiment in restyling [tldraw](https://github.com/tldraw/tldraw) into a flat, professional-looking canvas editor. Built with [Next.js](https://nextjs.org/) and the [Geist](https://vercel.com/font) font family.
 
-## Local development
+## What's changed from vanilla tldraw
 
-Install dependencies with `yarn` or `npm install`.
+- **Flat UI** — all gradients, shadows, and rounded corners replaced with sharp edges and 1px borders
+- **Monochrome selection** — selection outlines, handles, and focus rings are black instead of blue
+- **Muted color palette** — shape colors remapped to softer, professional tones
+- **Geist fonts** — Sans, Mono, and Instrument Serif replace the defaults
+- **Pixel fonts** — five Geist Pixel variants (Square, Grid, Circle, Triangle, Line) available via a custom dropdown in the style panel
+- **Sharp arrows** — miter joins, butt caps, and triangle arrowheads instead of the default rounded/hand-drawn style
+- **No "draw" dash** — the freehand dash option is hidden from the style panel
 
-Run the development server with `yarn dev` or `npm run dev`.
+## Getting started
 
-Open `http://localhost:3000/` in your browser to see the app.
+```bash
+git clone https://github.com/miguelalcalde/tldraw-styled.git
+cd tldraw-styled
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000` in your browser.
+
+## How it works
+
+Most of the restyling is done through CSS variable overrides and targeted selectors in `src/app/globals.css`. Shape colors are remapped in `src/app/page.tsx` via `DefaultColorThemePalette`. A small `patch-package` patch adjusts arrow defaults at the source level. The pixel font picker is a custom component in `src/components/CustomStylePanelContent.tsx`.
 
 ## License
 
 This project is provided under the MIT license found [here](https://github.com/tldraw/nextjs-template/blob/main/LICENSE.md). The tldraw SDK is provided under the [tldraw license](https://github.com/tldraw/tldraw/blob/main/LICENSE.md).
-
-## Trademarks
-
-Copyright (c) 2024-present tldraw Inc. The tldraw name and logo are trademarks of tldraw. Please see our [trademark guidelines](https://github.com/tldraw/tldraw/blob/main/TRADEMARKS.md) for info on acceptable usage.
-
-## Distributions
-
-You can find tldraw on npm [here](https://www.npmjs.com/package/@tldraw/tldraw?activeTab=versions).
-
-## Contribution
-
-Please see our [contributing guide](https://github.com/tldraw/tldraw/blob/main/CONTRIBUTING.md). Found a bug? Please [submit an issue](https://github.com/tldraw/tldraw/issues/new).
-
-## Community
-
-Have questions, comments or feedback? [Join our discord](https://discord.tldraw.com/?utm_source=github&utm_medium=readme&utm_campaign=sociallink). For the latest news and release notes, visit [tldraw.dev](https://tldraw.dev).
-
-## Contact
-
-Find us on Twitter/X at [@tldraw](https://twitter.com/tldraw).
